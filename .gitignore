@@ -1,0 +1,9 @@
+.project
+.settings
+.classpath
+*.log
+target
+/ccom.revolsys.open.core/
+/.gradle/
+/build/
+/bin/
