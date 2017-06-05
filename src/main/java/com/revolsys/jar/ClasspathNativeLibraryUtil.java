@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClasspathNativeLibraryUtil {
   private static final Map<String, Boolean> LIBRARY_LOADED_MAP = new HashMap<>();
@@ -51,6 +51,10 @@ public class ClasspathNativeLibraryUtil {
     }
   }
 
+  private static Logger getLogger() {
+    return Logger.getLogger(ClasspathNativeLibraryUtil.class.getName());
+  }
+
   private static String getOperatingSystemName() {
     if (OS.IS_WINDOWS) {
       return "winnt";
@@ -88,8 +92,7 @@ public class ClasspathNativeLibraryUtil {
         System.loadLibrary(name);
         loaded = true;
       } catch (final Throwable e) {
-        LoggerFactory.getLogger(ClasspathNativeLibraryUtil.class)
-          .debug("Unable to load shared library " + name, e);
+        getLogger().log(Level.SEVERE, "Unable to load shared library " + name, e);
       }
     } else {
       try {
@@ -100,8 +103,7 @@ public class ClasspathNativeLibraryUtil {
         System.load(file.getCanonicalPath());
         loaded = true;
       } catch (final Throwable e) {
-        LoggerFactory.getLogger(ClasspathNativeLibraryUtil.class)
-          .error("Unable to load shared library from classpath " + url, e);
+        getLogger().log(Level.SEVERE, "Unable to load shared library from classpath " + url, e);
       }
     }
     LIBRARY_LOADED_MAP.put(name, loaded);
@@ -122,7 +124,7 @@ public class ClasspathNativeLibraryUtil {
           System.loadLibrary(name);
           loaded = true;
         } catch (final Throwable e) {
-          LoggerFactory.getLogger(ClasspathNativeLibraryUtil.class).debug(
+          getLogger().log(Level.SEVERE,
             "Unable to load shared library from classpath " + libraryName + " " + fileName, e);
         }
       }
@@ -135,8 +137,8 @@ public class ClasspathNativeLibraryUtil {
         System.load(file.getCanonicalPath());
         loaded = true;
       } catch (final Throwable e) {
-        LoggerFactory.getLogger(ClasspathNativeLibraryUtil.class)
-          .debug("Unable to load shared library from classpath " + libraryName + " " + fileName, e);
+        getLogger().log(Level.SEVERE,
+          "Unable to load shared library from classpath " + libraryName + " " + fileName, e);
       }
     }
     LIBRARY_LOADED_MAP.put(name, loaded);

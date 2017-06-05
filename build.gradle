@@ -27,7 +27,6 @@ repositories {
 }
 
 dependencies {
-  compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.21'
 }
 
 clean.doFirst {
@@ -103,10 +102,16 @@ task swig(type:Exec) {
 }
 
 task copyNativeLibs {
-  if (System.properties['os.name'].equals('Mac OS X')) {
+  def os = System.properties['os.name']
+  if (os.equals('Mac OS X')) {
     copy {
       from 'build/libs/FileGdbJni/shared/libFileGdbJni.dylib'
       into 'src/main/resources/native/macosx/x86_64/'
+    }
+  } else if (os.startsWith('Windows')) {
+    copy {
+      from 'build/libs/FileGdbJni/shared/FileGdbJni.dll'
+      into 'src/main/resources/native/winnt/x86_64/'
     }
   } else {
     copy {
@@ -131,49 +136,33 @@ model {
     visualCpp(VisualCpp) {
       eachPlatform {
         cppCompiler.withArguments { args ->
-          args << '-W'
-          args << '-fexceptions'
-          args << '-fPIC'
-          args << '-O3'
-          args << '-m64'
-          args << '-DUNICODE'
-          args << '-D_UNICODE'
-          args << '-DUNIX'
-          args << '-D_REENTRANT'
-          args << '-DFILEGDB_API'
-          args << '-D__USE_FILE_OFFSET64'
-          args << '-DUNIX_FILEGDB_API'
-          args << '-D_FILE_OFFSET_BITS=64'
-          args << '-D_LARGEFILE64_SOURCE'
-          args << "-I${javaHome}/include/"
+          args << '/EHsc'
+          args << '/O2'
+          args << '/MT'
+          args << "-I${javaHome}\\include"
+          args << "-I${javaHome}\\include\\win32"
         }
         linker.withArguments { args ->
-          args << '-lFileGDBAPI'
-        }
-        if (System.properties['os.name'].equals('Mac OS X')) {
-          cppCompiler.withArguments { args ->
-            args << "-I${javaHome}/include/darwin"
-            args << '-stdlib=libc++'
-          }
-          linker.withArguments { args ->
-            args << '-stdlib=libc++'
-            args << '-Lsrc/FileGdbJni/lib/macosx/x86_64'
-            args << '-Lsrc/main/resources/native/macosx/x86_64'
-          }
-        } else {
-          cppCompiler.withArguments { args ->
-            args << "-I${javaHome}/include/linux"
-            args << '-DLINUX_CLANG'
-            args << '-std=c++11'
-            args << '-stdlib=libstdc++'
-            args << '-Wno-narrowing'
-          }
-          linker.withArguments { args ->
-            args << '-v'
-            args << '-stdlib=libstdc++'
-            args << '-lpthread'
-            args << '-lrt'
-          }
+          List newArgs = new ArrayList(args);
+          def target = newArgs.remove(newArgs.size() - 1);
+          newArgs << '/MACHINE:X64'
+          newArgs << '-entry:_DllMainCRTStartup'
+          newArgs << '/RELEASE'
+          newArgs << '/LIBPATH:src\\FileGdbJni\\lib\\winnt\\x86_64'
+          newArgs << 'msvcrt.lib'
+          newArgs << 'oldnames.lib'
+          newArgs << 'libcpmt.lib'
+          newArgs << 'kernel32.lib'
+          newArgs << 'advapi32.lib'
+          newArgs << 'user32.lib'
+          newArgs << 'gdi32.lib'
+          newArgs << 'comdlg32.lib'
+          newArgs << 'winspool.lib'
+          newArgs << 'Ws2_32.lib'
+          newArgs << 'FileGDBAPI.lib'
+          newArgs << target
+          args.clear()
+          args.addAll(newArgs)
         }
       }
     }
@@ -231,6 +220,7 @@ model {
   }
   components {
     FileGdbJni(NativeLibrarySpec) {
+      targetPlatform 'x64'
       binaries.withType(StaticLibraryBinarySpec) {
         buildable = false
       }
