@@ -8,7 +8,7 @@
 
 package com.revolsys.filegdb.api;
 
-public class Row {
+public class Row implements java.io.Closeable {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 
@@ -33,6 +33,10 @@ public class Row {
       }
       swigCPtr = 0;
     }
+  }
+
+  public void close() {
+    delete();
   }
 
   public Row() {

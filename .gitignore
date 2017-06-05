@@ -7,3 +7,7 @@ target
 /.gradle/
 /build/
 /bin/
+/gradle-app.setting
+/gradle/
+/gradlew
+/gradlew.bat

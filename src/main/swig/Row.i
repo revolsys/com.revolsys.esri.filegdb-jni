@@ -30,6 +30,14 @@
 %ignore FileGDBAPI::Row::GetFields;
 %ignore FileGDBAPI::Row::getFields;
 
+%typemap(javainterfaces) FileGDBAPI::Row "java.io.Closeable"
+
+%typemap(javacode) FileGDBAPI::Row %{
+  public void close() {
+    delete();
+  }
+%}
+
 %include "Row.h"
 
 %extend FileGDBAPI::Row {
@@ -173,11 +181,3 @@
     return value;
   }
 }
-
-%typemap(javainterfaces) FileGDBAPI::Row "java.io.Closeable"
-
-%typemap(javacode) FileGDBAPI::Row %{
-  public void close() {
-    delete();
-  }
-%}

@@ -166,7 +166,7 @@ model {
 task createPom  {
   pom {
     project {
-      artifactId 'com.revolsys.esri.filegdb.api'
+      artifactId 'com.revolsys.filegdb.api'
 
       inceptionYear '2017'
 
@@ -177,13 +177,13 @@ task createPom  {
     
       issueManagement {
         system 'GitHub'
-        url 'https://github.com/revolsys/com.revolsys.esri.filegdb.api/issues'
+        url 'https://github.com/revolsys/com.revolsys.filegdb.api/issues'
       }
 
       scm {
-        connection 'scm:git:git@github.com:revolsys/com.revolsys.esri.filegdb.api.git'
-        developerConnection 'scm:git:git@github.com:revolsys/com.revolsys.esri.filegdb.api.git'
-        url 'https://github.com/revolsys/com.revolsys.esri.filegdb.api'
+        connection 'scm:git:git@github.com:revolsys/com.revolsys.filegdb.api.git'
+        developerConnection 'scm:git:git@github.com:revolsys/com.revolsys.filegdb.api.git'
+        url 'https://github.com/revolsys/com.revolsys.filegdb.api'
       }
 
       developers {
