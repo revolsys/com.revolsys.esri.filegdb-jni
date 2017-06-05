@@ -36,25 +36,52 @@ clean.doFirst {
     include '*.java'
   }
 }
-task download(type:Exec) {
+task downloadMacosx(type:Exec) {
   doFirst {
+    mkdir "${buildDir}/macosx"
+    mkdir 'src/FileGdbJni/lib/macosx/x86_64'
     mkdir 'src/main/resources/native/macosx/x86_64'
     download {
       src 'https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5/FileGDB_API_1_5_64clang.zip'
-      dest buildDir
+      dest "${buildDir}/maxosx"
     }
-    commandLine 'unzip', '-q', '-f', 'build/FileGDB_API_1_5_64clang.zip', '-d', buildDir
+    commandLine 'unzip', '-q', '-o', "${buildDir}/macosx/FileGDB_API_1_5_64clang.zip", '-d', "${buildDir}/macosx"
     copy {
-      from('build/FileGDB_API-64clang/lib/') {
+      from("${buildDir}/macosx/FileGDB_API-64clang/lib/") {
         include '*.dylib'
       }
       into 'src/main/resources/native/macosx/x86_64'
     }
     copy {
-      from('build/FileGDB_API-64clang/lib/') {
+      from("${buildDir}/macosx/FileGDB_API-64clang/lib/") {
         include '*.a'
       }
       into 'src/FileGdbJni/lib/macosx/x86_64'
+    }
+  }
+}
+task downloadWinnt(type:Exec) {
+  doFirst {
+    mkdir "${buildDir}/winnt"
+    mkdir 'src/FileGdbJni/lib/winnt/x86_64'
+    mkdir 'src/main/resources/native/winnt/x86_64'
+  /*  download {
+      src 'https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5/FileGDB_API_1_5_VS2015.zip'
+      dest "${buildDir}/winnt"
+    }*/
+    commandLine 'unzip', '-q', '-o', "${buildDir}/winnt/FileGDB_API_1_5_VS2015.zip", '-d', "${buildDir}/winnt"
+    copy {
+      from("${buildDir}/winnt/bin64/") {
+        include 'FileGDBAPI.dll'
+        include 'Esri.FileGDBAPI.dll'
+      }
+      into 'src/main/resources/native/macosx/x86_64'
+    }
+    copy {
+      from ("${buildDir}/winnt/lib64/") {
+        include 'FileGDBAPI.lib'
+      }
+      into 'src/FileGdbJni/lib/winnt/x86_64'
     }
   }
 }
@@ -102,6 +129,53 @@ model {
   }
   toolChains {
     visualCpp(VisualCpp) {
+      eachPlatform {
+        cppCompiler.withArguments { args ->
+          args << '-W'
+          args << '-fexceptions'
+          args << '-fPIC'
+          args << '-O3'
+          args << '-m64'
+          args << '-DUNICODE'
+          args << '-D_UNICODE'
+          args << '-DUNIX'
+          args << '-D_REENTRANT'
+          args << '-DFILEGDB_API'
+          args << '-D__USE_FILE_OFFSET64'
+          args << '-DUNIX_FILEGDB_API'
+          args << '-D_FILE_OFFSET_BITS=64'
+          args << '-D_LARGEFILE64_SOURCE'
+          args << "-I${javaHome}/include/"
+        }
+        linker.withArguments { args ->
+          args << '-lFileGDBAPI'
+        }
+        if (System.properties['os.name'].equals('Mac OS X')) {
+          cppCompiler.withArguments { args ->
+            args << "-I${javaHome}/include/darwin"
+            args << '-stdlib=libc++'
+          }
+          linker.withArguments { args ->
+            args << '-stdlib=libc++'
+            args << '-Lsrc/FileGdbJni/lib/macosx/x86_64'
+            args << '-Lsrc/main/resources/native/macosx/x86_64'
+          }
+        } else {
+          cppCompiler.withArguments { args ->
+            args << "-I${javaHome}/include/linux"
+            args << '-DLINUX_CLANG'
+            args << '-std=c++11'
+            args << '-stdlib=libstdc++'
+            args << '-Wno-narrowing'
+          }
+          linker.withArguments { args ->
+            args << '-v'
+            args << '-stdlib=libstdc++'
+            args << '-lpthread'
+            args << '-lrt'
+          }
+        }
+      }
     }
     gcc(Gcc) {
     }
