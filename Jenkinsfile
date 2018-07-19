@@ -2,8 +2,8 @@
 // ----------
 // gitTag
 
-def version = 1.5.1
-def version_ = 1_5_1
+def version = '1.5.1'
+def version_ = '1_5_1'
 
 def checkoutBranch(folderName, url, branchName) {
   dir(folderName) {
