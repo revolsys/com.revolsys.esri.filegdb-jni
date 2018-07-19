@@ -1,3 +1,18 @@
+def checkoutBranch(folderName, url, branchName) {
+  dir(folderName) {
+    deleteDir()
+    checkout([
+      $class: 'GitSCM',
+      branches: [[name: branchName]],
+      doGenerateSubmoduleConfigurations: false,
+      extensions: [],
+      gitTool: 'Default',
+      submoduleCfg: [],
+      userRemoteConfigs: [[url: url]]
+    ])
+  }
+}
+
 node ('master') {
   def rtMaven = Artifactory.newMavenBuild()
   def buildInfo
