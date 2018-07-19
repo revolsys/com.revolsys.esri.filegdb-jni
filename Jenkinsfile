@@ -2,6 +2,9 @@
 // ----------
 // gitTag
 
+def version = 1.5.1
+def version_ = 1_5_1
+
 def checkoutBranch(folderName, url, branchName) {
   dir(folderName) {
     deleteDir()
@@ -58,6 +61,14 @@ git config --global user.name "Paul Austin"
   stage ('Checkout') {
     checkoutBranch('revolsys', 'ssh://git@github.com/revolsys/com.revolsys.filegdb.api.git', 'master');
     checkoutBranch('esri', 'https://github.com/Esri/file-geodatabase-api.git', 'master');
+  }
+  
+  stage ('ESRI jars') {
+    dir ("esri/FileGDB_API_${version}") {
+      unzip zipFile: "FileGDB_API_${version_}-64clang.zip", quiet: true
+      unzip zipFile: "FileGDB_API_${version_}-64.tar.gz ", quiet: true
+      unzip zipFile: "FileGDB_API_${version_}-VS2017.zip", quiet: true
+    }
   }
 /*
   stage ('Set Project Versions') {
