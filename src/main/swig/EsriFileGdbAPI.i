@@ -1,5 +1,8 @@
 %module "EsriFileGdb"
 
+%define __linux__
+%enddef
+
 %{
 
 #include <stdexcept>
@@ -8,7 +11,7 @@
 #include <stdio.h>
 #include "time.h"
 #include "FileGDBAPI.h"
-  
+
 std::string wstring2string(std::wstring wstr) {
   std::string str(wstr.length(),' ');
   copy(wstr.begin(),wstr.end(),str.begin());
@@ -47,26 +50,35 @@ void handleException(JNIEnv *jenv, const std::runtime_error e) {
 %}
 
 %pragma(java) jniclassimports=%{
-import com.revolsys.jar.ClasspathNativeLibraryUtil;
-import com.revolsys.jar.OS;
+import java.io.IOException;
+
+import org.scijava.nativelib.NativeLibraryUtil;
+import org.scijava.nativelib.NativeLibraryUtil.Architecture;
+import org.scijava.nativelib.NativeLoader;
 %}
 
 %pragma(java) jniclasscode=%{
   static {
-    if (OS.isUnix() || OS.isMac()) {
-      ClasspathNativeLibraryUtil.loadLibrary("fgdbunixrtl");
-      ClasspathNativeLibraryUtil.loadLibrary("FileGDBAPI");
-      ClasspathNativeLibraryUtil.loadLibrary("FileGdbJni");
-    } else if (OS.isWindows()) {
-      ClasspathNativeLibraryUtil.loadLibrary("FileGDBAPI");
-      ClasspathNativeLibraryUtil.loadLibrary("Esri.FILEGDBAPI");
-      ClasspathNativeLibraryUtil.loadLibrary("FileGdbJni");
-      EsriFileGdb.setMaxOpenFiles(2048);
+    Architecture arch = NativeLibraryUtil.getArchitecture();
+    try {
+      if (arch == Architecture.LINUX_64 ||arch == Architecture.OSX_64) {
+        NativeLoader.loadLibrary("fgdbunixrtl");
+        NativeLoader.loadLibrary("FileGDBAPI");
+        NativeLoader.loadLibrary("FileGdbJni");
+      } else if (arch == Architecture.WINDOWS_64) {
+        NativeLoader.loadLibrary("FileGDBAPI");
+        NativeLoader.loadLibrary("Esri.FILEGDBAPI");
+        NativeLoader.loadLibrary("FileGdbJni");
+        EsriFileGdb.setMaxOpenFiles(2048);
+      } else {
+        System.err.println("ESRI FGDB API not supported for Architecture: " + arch);
+      }
+    } catch (IOException e) {
+      System.err.println("Error loading ESRI FGDB API not supported for Architecture: " + arch);
+      e.printStackTrace();
     }
   }
 %}
-%define EXT_FILEGDB_API
-%enddef
 
 %include "std_vector.i"
 %include "std_string.i"
@@ -126,7 +138,9 @@ import com.revolsys.jar.OS;
 %inline {
   void setMaxOpenFiles(int maxOpenFiles) {
 #ifdef _WIN32
-    _setmaxstdio(maxOpenFiles);
+  _setmaxstdio(maxOpenFiles);
+#else
+  maxOpenFiles++;
 #endif
   }
   

@@ -1,0 +1,270 @@
+plugins {
+    id "de.undercouch.download" version "3.2.0"
+}
+
+apply plugin: 'java'
+apply plugin: 'cpp'
+apply plugin: 'maven'
+
+group = 'com.revolsys'
+version = '1.5.0-SNAPSHOT'
+
+description = ''''''
+
+def javaHome = System.properties['java.home'] + '/..'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+repositories {
+ maven { url 'http://open.revolsys.com/artifactory/local-releases/' }
+ maven { url 'http://open.revolsys.com/artifactory/local-snapshots/' }
+ maven { url 'http://repo1.maven.org/maven2/' }
+}
+
+dependencies {
+}
+
+clean.doFirst {
+  delete 'src/FileGdbJni/cpp/EsriFileGdb_wrap.cpp'
+  delete fileTree('src/main/java/com/revolsys/filegdb/api') {
+    include '*.java'
+  }
+}
+task downloadMacosx(type:Exec) {
+  doFirst {
+    mkdir "${buildDir}/macosx"
+    mkdir 'src/FileGdbJni/lib/macosx/x86_64'
+    mkdir 'src/main/resources/native/macosx/x86_64'
+    download {
+      src 'https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5/FileGDB_API_1_5_64clang.zip'
+      dest "${buildDir}/maxosx"
+    }
+    commandLine 'unzip', '-q', '-o', "${buildDir}/macosx/FileGDB_API_1_5_64clang.zip", '-d', "${buildDir}/macosx"
+    copy {
+      from("${buildDir}/macosx/FileGDB_API-64clang/lib/") {
+        include '*.dylib'
+      }
+      into 'src/main/resources/native/macosx/x86_64'
+    }
+    copy {
+      from("${buildDir}/macosx/FileGDB_API-64clang/lib/") {
+        include '*.a'
+      }
+      into 'src/FileGdbJni/lib/macosx/x86_64'
+    }
+  }
+}
+task downloadWinnt(type:Exec) {
+  doFirst {
+    mkdir "${buildDir}/winnt"
+    mkdir 'src/FileGdbJni/lib/winnt/x86_64'
+    mkdir 'src/main/resources/native/winnt/x86_64'
+  /*  download {
+      src 'https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_1.5/FileGDB_API_1_5_VS2015.zip'
+      dest "${buildDir}/winnt"
+    }*/
+    commandLine 'unzip', '-q', '-o', "${buildDir}/winnt/FileGDB_API_1_5_VS2015.zip", '-d', "${buildDir}/winnt"
+    copy {
+      from("${buildDir}/winnt/bin64/") {
+        include 'FileGDBAPI.dll'
+        include 'Esri.FileGDBAPI.dll'
+      }
+      into 'src/main/resources/native/macosx/x86_64'
+    }
+    copy {
+      from ("${buildDir}/winnt/lib64/") {
+        include 'FileGDBAPI.lib'
+      }
+      into 'src/FileGdbJni/lib/winnt/x86_64'
+    }
+  }
+}
+
+task swig(type:Exec) {
+  doFirst {
+    mkdir 'src/FileGdbJni/cpp'
+    mkdir 'src/main/java/com/revolsys/filegdb/api'
+    commandLine 'swig',
+      '-c++',
+      '-o', 'src/FileGdbJni/cpp/EsriFileGdb_wrap.cpp',
+      '-java',
+      '-package', 'com.revolsys.filegdb.api',
+      '-outdir', 'src/main/java/com/revolsys/filegdb/api',
+      '-Isrc/main/swig',
+      '-Isrc/FileGdbJni/headers',
+      'src/main/swig/EsriFileGdbAPI.i'
+  }
+}
+
+task copyNativeLibs {
+  def os = System.properties['os.name']
+  if (os.equals('Mac OS X')) {
+    copy {
+      from 'build/libs/FileGdbJni/shared/libFileGdbJni.dylib'
+      into 'src/main/resources/native/macosx/x86_64/'
+    }
+  } else if (os.startsWith('Windows')) {
+    copy {
+      from 'build/libs/FileGdbJni/shared/FileGdbJni.dll'
+      into 'src/main/resources/native/winnt/x86_64/'
+    }
+  } else {
+    copy {
+      from 'build/libs/FileGdbJni/shared/libFileGdbJni.so'
+      into 'src/main/resources/native/linux/x86_64/'
+    }
+  }
+}
+
+compileJava.dependsOn copyNativeLibs
+
+model {
+  tasks.compileFileGdbJniSharedLibraryFileGdbJniCpp {
+    dependsOn swig
+  }
+  platforms {
+    x64 {
+        architecture "x86_64"
+    }
+  }
+  toolChains {
+    visualCpp(VisualCpp) {
+      eachPlatform {
+        cppCompiler.withArguments { args ->
+          args << '/EHsc'
+          args << '/O2'
+          args << '/MT'
+          args << "-I${javaHome}\\include"
+          args << "-I${javaHome}\\include\\win32"
+        }
+        linker.withArguments { args ->
+          List newArgs = new ArrayList(args);
+          def target = newArgs.remove(newArgs.size() - 1);
+          newArgs << '/MACHINE:X64'
+          newArgs << '-entry:_DllMainCRTStartup'
+          newArgs << '/RELEASE'
+          newArgs << '/LIBPATH:src\\FileGdbJni\\lib\\winnt\\x86_64'
+          newArgs << 'msvcrt.lib'
+          newArgs << 'oldnames.lib'
+          newArgs << 'libcpmt.lib'
+          newArgs << 'kernel32.lib'
+          newArgs << 'advapi32.lib'
+          newArgs << 'user32.lib'
+          newArgs << 'gdi32.lib'
+          newArgs << 'comdlg32.lib'
+          newArgs << 'winspool.lib'
+          newArgs << 'Ws2_32.lib'
+          newArgs << 'FileGDBAPI.lib'
+          newArgs << target
+          args.clear()
+          args.addAll(newArgs)
+        }
+      }
+    }
+    gcc(Gcc) {
+    }
+    clang(Clang) {
+      eachPlatform {
+        cppCompiler.withArguments { args ->
+          args << '-W'
+          args << '-fexceptions'
+          args << '-fPIC'
+          args << '-O3'
+          args << '-m64'
+          args << '-DUNICODE'
+          args << '-D_UNICODE'
+          args << '-DUNIX'
+          args << '-D_REENTRANT'
+          args << '-DFILEGDB_API'
+          args << '-D__USE_FILE_OFFSET64'
+          args << '-DUNIX_FILEGDB_API'
+          args << '-D_FILE_OFFSET_BITS=64'
+          args << '-D_LARGEFILE64_SOURCE'
+          args << "-I${javaHome}/include/"
+        }
+        linker.withArguments { args ->
+          args << '-lFileGDBAPI'
+        }
+        if (System.properties['os.name'].equals('Mac OS X')) {
+          cppCompiler.withArguments { args ->
+            args << "-I${javaHome}/include/darwin"
+            args << '-stdlib=libc++'
+          }
+          linker.withArguments { args ->
+            args << '-stdlib=libc++'
+            args << '-Lsrc/FileGdbJni/lib/macosx/x86_64'
+            args << '-Lsrc/main/resources/native/macosx/x86_64'
+          }
+        } else {
+          cppCompiler.withArguments { args ->
+            args << "-I${javaHome}/include/linux"
+            args << '-DLINUX_CLANG'
+            args << '-std=c++11'
+            args << '-stdlib=libstdc++'
+            args << '-Wno-narrowing'
+          }
+          linker.withArguments { args ->
+            args << '-v'
+            args << '-stdlib=libstdc++'
+            args << '-lpthread'
+            args << '-lrt'
+          }
+        }
+      }
+    }
+  }
+  components {
+    FileGdbJni(NativeLibrarySpec) {
+      targetPlatform 'x64'
+      binaries.withType(StaticLibraryBinarySpec) {
+        buildable = false
+      }
+    }
+  }
+}
+task createPom  {
+  pom {
+    project {
+      artifactId 'com.revolsys.filegdb.api'
+
+      inceptionYear '2017'
+
+      organization {
+        name 'Revolution Systems Inc.'
+        url 'http://www.revolsys.com/'
+      }
+    
+      issueManagement {
+        system 'GitHub'
+        url 'https://github.com/revolsys/com.revolsys.filegdb.api/issues'
+      }
+
+      scm {
+        connection 'scm:git:git@github.com:revolsys/com.revolsys.filegdb.api.git'
+        developerConnection 'scm:git:git@github.com:revolsys/com.revolsys.filegdb.api.git'
+        url 'https://github.com/revolsys/com.revolsys.filegdb.api'
+      }
+
+      developers {
+        developer {
+          id 'paustin'
+          name 'Paul Austin'
+          email 'paul.austin@revolsys.com'
+        }
+      }
+
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
+    }
+  }.writeTo('pom.xml')
+}
