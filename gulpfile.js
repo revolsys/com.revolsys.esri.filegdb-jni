@@ -1,4 +1,3 @@
-var ImportJavaHome = require('locate-java-home').default;
 var gulp = require('gulp');
 var download = require("gulp-download");
 var decompress = require('gulp-decompress')
@@ -12,13 +11,7 @@ const version = '1.5.1';
 const version_ = version.replace(/\./g, '_');
 const baseUrl = `https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_${version}/`;
 const filePrefix = `FileGDB_API_${version_}-` ;
-let javaHome='/Library/Java/Home';
-LocateJavaHome({
-  version: "=1.8",
-  mustBeJDK: true
-}, function(error, javaHomes) {
-  javaHome = javaHomes[0]
-});
+let javaHome=process.env.JAVA_HOME;
 
 gulp.task('downloadEsriOSX', function() {
   return download(baseUrl + filePrefix + '64clang.zip')
