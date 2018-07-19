@@ -11,7 +11,6 @@ const version = '1.5.1';
 const version_ = version.replace(/\./g, '_');
 const baseUrl = `https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_${version}/`;
 const filePrefix = `FileGDB_API_${version_}-` ;
-let javaHome=process.env.JAVA_HOME;
 
 gulp.task('downloadEsriOSX', function() {
   return download(baseUrl + filePrefix + '64clang.zip')
@@ -86,7 +85,7 @@ gulp.task('swig', run('swig -c++ -o target/cpp/EsriFileGdb_wrap.cpp -java -packa
 }));
 
 gulp.task('compileOSX', run(
-  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I${javaHome}/include/" "-I${javaHome}/include/darwin" "-Itarget/FileGDB_API-64clang/include" -stdlib=libc++ -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`
+  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I/Library/Java/JavaVirtualMachines/jdk1.8.0/Contents/Home/include/" "-I/Library/Java/JavaVirtualMachines/jdk1.8.0/Contents/Home/include/darwin" "-Itarget/FileGDB_API-64clang/include" -stdlib=libc++ -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`
 ));
 
 gulp.task('linkOSX', run(
@@ -94,7 +93,7 @@ gulp.task('linkOSX', run(
 ));
 
 gulp.task('compileLinux', run(
-  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I${javaHome}/include/" "-I${javaHome}/include/linux" -DLINUX_CLANG -std=c++11 -stdlib=libstdc++ -Wno-narrowing -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`
+  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I/usr/lib/jvm/java-8-oracle/include/" "-I/usr/lib/jvm/java-8-oracle/include/linux" -DLINUX_CLANG -std=c++11 -stdlib=libstdc++ -Wno-narrowing -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`
 ));
 
 gulp.task('linkLinux', run(
