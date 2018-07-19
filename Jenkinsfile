@@ -15,10 +15,10 @@ git config --global user.name "Paul Austin"
   
   stage ('Cross Platform') {
     dir ('source') {
-      sh ```
+      sh '''
 npm install
 gulp
-      ```
+      '''
     }
   }
 }
