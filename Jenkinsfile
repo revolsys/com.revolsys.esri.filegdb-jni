@@ -56,7 +56,7 @@ git config --global user.name "Paul Austin"
   }
 
   stage ('Checkout') {
-    checkoutBranch('revolsys', 'ssh://git@github.com:revolsys/com.revolsys.filegdb.api.git', 'master');
+    checkoutBranch('revolsys', 'ssh://git@github.com/revolsys/com.revolsys.filegdb.api.git', 'master');
     checkoutBranch('esri', 'https://github.com/Esri/file-geodatabase-api.git', 'master');
   }
 /*
