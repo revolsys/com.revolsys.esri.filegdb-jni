@@ -1,4 +1,4 @@
-import LocateJavaHome from 'locate-java-home';
+var ImportJavaHome = require('locate-java-home').default;
 var gulp = require('gulp');
 var download = require("gulp-download");
 var decompress = require('gulp-decompress')
