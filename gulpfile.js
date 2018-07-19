@@ -40,14 +40,6 @@ gulp.task('mavenClean', run('mvn clean', {
 
 gulp.task('copyEsriLibs', ()=> {
   return Promise.all([
-    gulp.src('target/FileGDB_API-64clang/lib/libfgdbunixrtl.dylib')
-    .pipe(rename(`libfgdbunixrtl-${version}.dylib`))
-    .pipe(gulp.dest('target/classes/natives/osx_64')),
-
-    gulp.src('target/FileGDB_API-64clang/lib/libFileGDBAPI.dylib')
-      .pipe(rename(`libFileGDBAPI-${version}.dylib`))
-      .pipe(gulp.dest('target/classes/natives/osx_64')),
-    
     gulp.src('target/FileGDB_API-64/lib/libfgdbunixrtl.so')
       .pipe(rename(`libfgdbunixrtl-${version}.so`))
       .pipe(gulp.dest('target/classes/natives/linux_64')),
@@ -55,6 +47,14 @@ gulp.task('copyEsriLibs', ()=> {
     gulp.src('target/FileGDB_API-64/lib/libFileGDBAPI.so')
       .pipe(rename(`libFileGDBAPI-${version}.so`))
       .pipe(gulp.dest('target/classes/natives/linux_64')),
+
+    gulp.src('target/FileGDB_API-64clang/lib/libfgdbunixrtl.dylib')
+      .pipe(rename(`libfgdbunixrtl-${version}.dylib`))
+      .pipe(gulp.dest('target/classes/natives/osx_64')),
+
+    gulp.src('target/FileGDB_API-64clang/lib/libFileGDBAPI.dylib')
+      .pipe(rename(`libFileGDBAPI-${version}.dylib`))
+      .pipe(gulp.dest('target/classes/natives/osx_64')),
 
     gulp.src('target/FileGDB_API-VS2017/bin64/Esri.FileGDBAPI.dll')
       .pipe(rename(`Esri.FileGDBAPI-${version}.dll`))
@@ -68,6 +68,11 @@ gulp.task('copyEsriLibs', ()=> {
 
 gulp.task('swigDirectories', ()=> {
   for (var dir of [
+    'target/classes/',
+    'target/classes/natives',
+    'target/classes/natives/linux_64',
+    'target/classes/natives/osx_64',
+    'target/classes/natives/windows_64',
     'target/cpp/',
     'target/java',
     'target/java/com', 
@@ -81,6 +86,7 @@ gulp.task('swigDirectories', ()=> {
     }
   }
 });
+
 gulp.task('swig', run('swig -c++ -o target/cpp/EsriFileGdb_wrap.cpp -java -package com.revolsys.esri.filegdb.api -outdir target/java/com/revolsys/esri/filegdb/api -Isrc/main/swig -Itarget/FileGDB_API-64/include src/main/swig/EsriFileGdbAPI.i', {
 }));
 
@@ -105,8 +111,8 @@ gulp.task('mavenInstall', run('mvn install', {
 
 gulp.task('default', gulpSequence(
   'mavenClean',
-  'downloadEsriOSX',
   'downloadEsriLinux',
+  'downloadEsriOSX',
   'downloadEsriWindows',
   'unzipEsriWindows',
   'copyEsriLibs',
