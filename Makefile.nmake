@@ -9,13 +9,14 @@ ENTRY=-entry:_DllMainCRTStartup
 
 SRC_FILE=target\cpp\EsriFileGdb_wrap.cpp
 TARGET_OBJ=target\cpp\EsriFileGdbJni.obj
-TARGET_LIB=target/classes/natives/windows_64/EsriFileGdbJni-$(VERSION).dll
+TARGET_LIB=target\classes\natives\windows_64\EsriFileGdbJni-$(VERSION).dll
 
 all: $(TARGET_LIB)
 
 $(SRC_FILE):
 
 $(TARGET_OBJ): $(SRC_FILE)
+  md target\classes\natives\windows_64
 	cl.exe \
 	  /c \
 	  /nologo \
