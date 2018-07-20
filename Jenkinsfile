@@ -82,7 +82,7 @@ gulp compileOSX linkOSX
       unstash 'shared';
       unstash 'windows';
       dir ('source') {
-        sh 'build-winnt.bat'
+        bat 'build-winnt.bat'
       }
       stash includes: '''
         source/target/classes/natives/windows_64/**
