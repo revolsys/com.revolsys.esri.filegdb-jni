@@ -38,26 +38,38 @@ gulp
   }
   
   stage ('Native Library Build') {
+
     stash includes: '''
       source/gulpfile.js,
       source/package.json,
       source/package-lock.json,
-      source/target/FileGDB_API-64clang/include/**,
       source/target/cpp/EsriFileGdb_wrap.cpp
+    ''', name: 'shared';
+
+    stash includes: '''
+      source/target/FileGDB_API-64clang/include/**,
+      source/target/FileGDB_API-64clang/lib/**
     ''', name: 'osx';
+
     node ('macosx') {
       env.NODEJS_HOME = "${tool 'node-latest'}"
       env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
      
+      unstash 'shared';
       unstash 'osx';
       dir ('source') {
         sh '''
-find .
-npm install -g gulp
 npm install
-gulp compileOSX
+gulp compileOSX linkOSX
         '''
+        stash includes: '''
+          target/classes/natives/**
+        ''', name: 'osxLib';
       }
     }
+    
+    unstash 'osxLib'
+    sh 'find source/target/classes/natives/'
+    sh 'gulp mavenInstall'
   }
 }
