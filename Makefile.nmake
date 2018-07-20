@@ -1,0 +1,53 @@
+WIN_SDK=C:\Program Files (x86)\Windows Kits\8.1
+ESRI_FILE_GBD_HOME=target\FileGDB_API-VS2017
+PLATFORM=X64
+JAVA_HOME=C:\Program Files\Java\jdk1.8.0
+LDIR="/LIBPATH:$(VSINSTALLDIR)\VC\lib\amd64" "/LIBPATH:$(WIN_SDK)\Lib\winv6.3\um\x64" "/LIBPATH:$(ESRI_FILE_GBD_HOME)\lib64"
+DLL_DIR=$(ESRI_FILE_GBD_HOME)\bin64
+ENTRY=-entry:_DllMainCRTStartup
+
+SRC_FILE=target\cpp\EsriFileGdb_wrap.cxx
+TARGET_OBJ=target\cpp\EsriFileGdbJni.obj
+TARGET_LIB=target/classes/natives/windows_64/EsriFileGdbJni-${VERSION}.dll
+
+all: $(TARGET_LIB)
+
+$(SRC_FILE):
+
+$(TARGET_OBJ): $(SRC_FILE)
+	cl.exe \
+	  /c \
+	  /nologo \
+	  /EHsc \
+	  /O2 \
+	  /MT \
+    "-I$(VSINSTALLDIR)\VC\include" \
+    "-I$(WIN_SDK)\Include\shared" \
+    "-I$(WIN_SDK)\Include\um" \
+    "-I$(JAVA_HOME)\include" \
+    "-I$(JAVA_HOME)\include\win32" \
+    "-I$(ESRI_FILE_GBD_HOME)\include" \
+    $(SRC_FILE) \
+    /Fo$(TARGET_OBJ)
+
+$(TARGET_LIB): $(TARGET_OBJ)
+	link.exe \
+	  /NODEFAULTLIB \
+	  /NOLOGO \
+	  /MACHINE:$(PLATFORM) \
+	  $(ENTRY) \
+	  /DLL \
+	  /RELEASE \
+	  -out:$(TARGET_LIB) \
+	  $(LDIR) \
+	  msvcrt.lib \
+    oldnames.lib \
+    libcpmt.lib \
+    kernel32.lib \
+    advapi32.lib \
+    user32.lib \
+    gdi32.lib \
+    comdlg32.lib \
+    winspool.lib \
+    FileGDBAPI.lib \
+    $(TARGET_OBJ)

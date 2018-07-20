@@ -51,6 +51,13 @@ gulp
       source/target/FileGDB_API-64clang/lib/**
     ''', name: 'osx';
 
+    stash includes: '''
+      source/build-winnt.bat,
+      source/Makefile.nmake,
+      source/target/FileGDB_API-VS2012/include/**,
+      source/target/FileGDB_API-VS2012/bin64/**
+    ''', name: 'windows';
+
     node ('macosx') {
       env.NODEJS_HOME = "${tool 'node-latest'}"
       env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
@@ -68,10 +75,26 @@ gulp compileOSX linkOSX
       ''', name: 'osxLib';
     }
     
-    unstash 'osxLib'
-    sh 'find source/target/classes/natives/'
+    node ('windows') {
+      env.NODEJS_HOME = "${tool 'node-latest'}"
+      env.PATH="${env.NODEJS_HOME}:${env.PATH}"
+     
+      unstash 'shared';
+      unstash 'windows';
       dir ('source') {
-        sh 'gulp mavenInstall'
+        sh 'build-winnt.bat'
       }
+      stash includes: '''
+        source/target/classes/natives/windows_64/**
+      ''', name: 'windowsLib';
+    }
+    
+    sh 'gulp compileLinux linkLinux'
+    
+    unstash 'osxLib'
+    unstash 'windowsLib'
+    dir ('source') {
+      sh 'gulp mavenInstall'
+    }
   }
 }
