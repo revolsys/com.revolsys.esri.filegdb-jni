@@ -16,7 +16,6 @@ all: $(TARGET_LIB)
 $(SRC_FILE):
 
 $(TARGET_OBJ): $(SRC_FILE)
-  md target\classes\natives\windows_64
 	cl.exe \
 	  /c \
 	  /nologo \
