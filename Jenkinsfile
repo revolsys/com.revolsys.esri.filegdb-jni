@@ -76,6 +76,7 @@ gulp compileOSX linkOSX
     }
     
     node ('windows') {
+      env.PATH = env.PATH + ";c:\\Windows\\System32"
       unstash 'shared';
       unstash 'windows';
       dir ('source') {
