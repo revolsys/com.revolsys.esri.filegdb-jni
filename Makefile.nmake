@@ -7,7 +7,7 @@ LDIR="/LIBPATH:$(VSINSTALLDIR)\VC\lib\amd64" "/LIBPATH:$(WIN_SDK)\Lib\winv6.3\um
 DLL_DIR=$(ESRI_FILE_GBD_HOME)\bin64
 ENTRY=-entry:_DllMainCRTStartup
 
-SRC_FILE=target\cpp\EsriFileGdb_wrap.cxx
+SRC_FILE=target\cpp\EsriFileGdb_wrap.cpp
 TARGET_OBJ=target\cpp\EsriFileGdbJni.obj
 TARGET_LIB=target/classes/natives/windows_64/EsriFileGdbJni-$(VERSION).dll
 
