@@ -38,14 +38,13 @@ gulp
   }
   
   stage ('Native Library Build') {
-    dir ('source') {
-      stash includes: '''
-        gulpfile.js,
-        package.json,
-        target/FileGDB_API-64clang/include,
-        target/cpp/EsriFileGdb_wrap.cpp
-      ''', name: 'osx';
-    }
+    stash includes: '''
+      source/gulpfile.js,
+      source/package.json,
+      source/package-lock.json,
+      source/target/FileGDB_API-64clang/include/**,
+      source/target/cpp/EsriFileGdb_wrap.cpp
+    ''', name: 'osx';
     node ('macosx') {
       env.NODEJS_HOME = "${tool 'node-latest'}"
       env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
