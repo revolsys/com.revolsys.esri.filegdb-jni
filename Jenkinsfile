@@ -67,7 +67,8 @@ gulp
       dir ('source') {
         sh '''
 npm install
-gulp compileOSX linkOSX
+gulp compileOSX
+gulp linkOSX
       '''
       }
       stash includes: '''
@@ -90,8 +91,11 @@ gulp compileOSX linkOSX
     unstash 'osxLib'
     unstash 'windowsLib'
     dir ('source') {
-      sh 'gulp compileLinux linkLinux'
-      sh 'gulp mavenInstall'
+      sh '''
+gulp compileLinux
+gulp linkLinux
+gulp mavenInstall
+      '''
     }
   }
 }
