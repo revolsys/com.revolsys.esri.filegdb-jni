@@ -13,7 +13,7 @@ def checkoutBranch(folderName, url, branchName) {
   }
 }
 
-node ('master') {
+node ('linux') {
   def rtMaven = Artifactory.newMavenBuild()
   def buildInfo
 
@@ -34,6 +34,20 @@ git config --global user.name "Paul Austin"
 npm install
 gulp
       '''
+    }
+  }
+  
+  stage ('Native Library Build') {
+    stash includes: [
+      'gulpfile.js',
+      'package.json',
+      'target/FileGDB_API-64clang/include',
+      'target/cpp/EsriFileGdb_wrap.cpp',
+    ], name: osx;
+    node ('macosx') {
+      unstash: osx;
+      npm install
+      gulp compileOSX
     }
   }
 }
