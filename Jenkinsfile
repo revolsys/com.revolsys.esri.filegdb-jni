@@ -51,10 +51,14 @@ gulp
       env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
      
       unstash: 'osx';
-      sh '''
+      dir ('source') {
+        sh '''
+find .
+npm install -g gulp
 npm install
 gulp compileOSX
-      '''
+        '''
+      }
     }
   }
 }
