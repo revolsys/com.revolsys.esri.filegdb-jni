@@ -3,7 +3,7 @@ WIN_SDK=C:\Program Files (x86)\Windows Kits\10
 ESRI_FILE_GBD_HOME=target\FileGDB_API-VS2017
 PLATFORM=X64
 JAVA_HOME=C:\Program Files\Java\jdk1.8.0
-LDIR="/LIBPATH:$(VSINSTALLDIR)\VC\lib\amd64" "/LIBPATH:$(WIN_SDK)\Lib\10.0.14393.0\ucrt\x64" "/LIBPATH:$(WIN_SDK)\Lib\10.0.14393.0\um\x64" "/LIBPATH:$(ESRI_FILE_GBD_HOME)\lib64"
+LDIR="/LIBPATH:$(VSINSTALLDIR)\VC\Tools\MSVC\14.10.25017\lib\x64" "/LIBPATH:$(VSINSTALLDIR)\VC\Tools\MSVC\14.10.25017\lib\onecore\x64" "/LIBPATH:$(WIN_SDK)\Lib\10.0.14393.0\ucrt\x64" "/LIBPATH:$(WIN_SDK)\Lib\10.0.14393.0\um\x64" "/LIBPATH:$(ESRI_FILE_GBD_HOME)\lib64"
 DLL_DIR=$(ESRI_FILE_GBD_HOME)\bin64
 ENTRY=-entry:_DllMainCRTStartup
 
@@ -16,13 +16,13 @@ all: $(TARGET_LIB)
 $(SRC_FILE):
 
 $(TARGET_OBJ): $(SRC_FILE)
-	cl.exe \
-	  /c \
-	  /nologo \
-	  /EHsc \
-	  /O2 \
-	  /MT \
-    "-I$(VSINSTALLDIR)\VC\include" \
+  cl.exe \
+    /c \
+    /nologo \
+    /EHsc \
+    /O2 \
+    /MT \
+    "-I$(VSINSTALLDIR)\VC\Tools\MSVC\14.10.25017\include" \
     "-I$(WIN_SDK)\Include\10.0.14393.0\ucrt" \
     "-I$(JAVA_HOME)\include" \
     "-I$(JAVA_HOME)\include\win32" \
@@ -31,25 +31,13 @@ $(TARGET_OBJ): $(SRC_FILE)
     /Fo$(TARGET_OBJ)
 
 $(TARGET_LIB): $(TARGET_OBJ)
-	link.exe \
-	  /NODEFAULTLIB \
-	  /NOLOGO \
-	  /MACHINE:$(PLATFORM) \
-	  $(ENTRY) \
-	  /DLL \
-	  /RELEASE \
-	  -out:$(TARGET_LIB) \
-	  $(LDIR) \
-    libucrt.lib \
-    crt.lib \
-	  msvcrt.lib \
-    oldnames.lib \
-    libcpmt.lib \
-    kernel32.lib \
-    advapi32.lib \
-    user32.lib \
-    gdi32.lib \
-    comdlg32.lib \
-    winspool.lib \
+  link.exe \
+    /NOLOGO \
+    /MACHINE:$(PLATFORM) \
+    $(ENTRY) \
+    /DLL \
+    /RELEASE \
+    -out:$(TARGET_LIB) \
+    $(LDIR) \
     FileGDBAPI.lib \
     $(TARGET_OBJ)
