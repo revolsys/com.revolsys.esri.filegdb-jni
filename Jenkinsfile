@@ -49,7 +49,7 @@ gulp
       env.NODEJS_HOME = "${tool 'node-latest'}"
       env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
      
-      unstash: 'osx';
+      unstash 'osx';
       dir ('source') {
         sh '''
 find .
