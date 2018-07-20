@@ -48,8 +48,10 @@ gulp
     }
     node ('macosx') {
       unstash: 'osx';
-      npm install
-      gulp compileOSX
+      sh '''
+npm install
+gulp compileOSX
+      '''
     }
   }
 }
