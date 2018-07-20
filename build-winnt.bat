@@ -1,5 +1,5 @@
 @echo off
-set VSINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio 14.0
+set VSINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community
 
 set PATH=%VSINSTALLDIR%\Common7\IDE;%PATH%
 set PATH=%VSINSTALLDIR%\VC\bin;%PATH%

@@ -54,8 +54,8 @@ gulp
     stash includes: '''
       source/build-winnt.bat,
       source/Makefile.nmake,
-      source/target/FileGDB_API-VS2015/include/**,
-      source/target/FileGDB_API-VS2015/lib64/**
+      source/target/FileGDB_API-VS2017/include/**,
+      source/target/FileGDB_API-VS2017/lib64/**
     ''', name: 'windows';
 
     node ('macosx') {
