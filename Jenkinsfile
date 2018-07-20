@@ -86,12 +86,11 @@ gulp compileOSX linkOSX
         source/target/classes/natives/windows_64/**
       ''', name: 'windowsLib';
     }
-    
-    sh 'gulp compileLinux linkLinux'
-    
+
     unstash 'osxLib'
     unstash 'windowsLib'
     dir ('source') {
+      sh 'gulp compileLinux linkLinux'
       sh 'gulp mavenInstall'
     }
   }
