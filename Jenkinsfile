@@ -47,7 +47,7 @@ gulp
       ''', name: 'osx';
     }
     node ('macosx') {
-      env.NODEJS_HOME = "${tool 'Node 10.x'}"
+      env.NODEJS_HOME = "${tool 'node-latest'}"
       env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
      
       unstash: 'osx';
