@@ -76,9 +76,6 @@ gulp compileOSX linkOSX
     }
     
     node ('windows') {
-      env.NODEJS_HOME = "${tool 'node-latest'}"
-      env.PATH="${env.NODEJS_HOME}:${env.PATH}"
-     
       unstash 'shared';
       unstash 'windows';
       dir ('source') {
