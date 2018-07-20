@@ -61,15 +61,17 @@ gulp
         sh '''
 npm install
 gulp compileOSX linkOSX
-        '''
-        stash includes: '''
-          target/classes/natives/**
-        ''', name: 'osxLib';
+      '''
       }
+      stash includes: '''
+        source/target/classes/natives/osx_64/**
+      ''', name: 'osxLib';
     }
     
     unstash 'osxLib'
     sh 'find source/target/classes/natives/'
-    sh 'gulp mavenInstall'
+      dir ('source') {
+        sh 'gulp mavenInstall'
+      }
   }
 }
