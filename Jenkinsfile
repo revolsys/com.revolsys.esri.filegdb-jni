@@ -43,9 +43,9 @@ gulp
       'package.json',
       'target/FileGDB_API-64clang/include',
       'target/cpp/EsriFileGdb_wrap.cpp',
-    ], name: osx;
+    ], name: 'osx';
     node ('macosx') {
-      unstash: osx;
+      unstash: 'osx';
       npm install
       gulp compileOSX
     }
