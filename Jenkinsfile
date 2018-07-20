@@ -55,7 +55,7 @@ gulp
       source/build-winnt.bat,
       source/Makefile.nmake,
       source/target/FileGDB_API-VS2015/include/**,
-      source/target/FileGDB_API-VS2015/bin64/**
+      source/target/FileGDB_API-VS2015/lib64/**
     ''', name: 'windows';
 
     node ('macosx') {
