@@ -25,14 +25,14 @@ gulp.task('downloadEsriLinux', function() {
 });
 
 gulp.task('downloadEsriWindows', function() {
-  return download(baseUrl + filePrefix + 'VS2012.zip')
+  return download(baseUrl + filePrefix + 'VS2015.zip')
     .pipe(gulp.dest('target/'));
 });
 
 gulp.task('unzipEsriWindows', function() {
-  return gulp.src('target/' + filePrefix + 'VS2012.zip')
+  return gulp.src('target/' + filePrefix + 'VS2015.zip')
     .pipe(unzip())
-    .pipe(gulp.dest('target/FileGDB_API-VS2012'));
+    .pipe(gulp.dest('target/FileGDB_API-VS2015'));
 });
 
 gulp.task('mavenClean', run('mvn clean', {
@@ -56,11 +56,11 @@ gulp.task('copyEsriLibs', ()=> {
       .pipe(rename(`libFileGDBAPI-${version}.dylib`))
       .pipe(gulp.dest('target/classes/natives/osx_64')),
 
-    gulp.src('target/FileGDB_API-VS2012/bin64/Esri.FileGDBAPI.dll')
+    gulp.src('target/FileGDB_API-VS2015/bin64/Esri.FileGDBAPI.dll')
       .pipe(rename(`Esri.FileGDBAPI-${version}.dll`))
       .pipe(gulp.dest('target/classes/natives/windows_64')),
 
-    gulp.src('target/FileGDB_API-VS2012/bin64/FileGDBAPI.dll')
+    gulp.src('target/FileGDB_API-VS2015/bin64/FileGDBAPI.dll')
       .pipe(rename(`FileGDBAPI-${version}.dll`))
       .pipe(gulp.dest('target/classes/natives/windows_64'))
   ]);
