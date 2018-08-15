@@ -99,7 +99,7 @@ gulp linkOSX
         bat 'build-winnt.bat'
       }
       stash includes: '''
-        source/target/classes/natives/windows_64/**
+        source/target/classes/natives/windows_64/*.dll
       ''', name: 'windowsLib';
     }
 
