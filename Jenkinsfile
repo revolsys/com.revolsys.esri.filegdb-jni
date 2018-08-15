@@ -14,8 +14,13 @@ def checkoutBranch(folderName, url, branchName) {
 }
 
 node ('linux') {
-  def rtMaven = Artifactory.newMavenBuild()
-  def buildInfo
+  def artifactoryServer = Artifactory.server 'prod'
+  def mavenRuntime = Artifactory.newMavenBuild()
+  mavenRuntime.tool = 'm3' 
+  mavenRuntime.deployer releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local', server: artifactoryServer
+  mavenRuntime.resolver releaseRepo: 'repo', snapshotRepo: 'repo', server: artifactoryServer
+  mavenRuntime.deployer.deployArtifacts = false
+  def buildInfo = Artifactory.newBuildInfo()
 
   stage ('SCM globals') {
      sh '''
@@ -94,8 +99,20 @@ gulp linkOSX
       sh '''
 gulp compileLinux
 gulp linkLinux
-gulp mavenInstall
       '''
+    }
+  }
+  
+  stage('build') {
+    dir ('source') {
+      mavenRuntime.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
+    }
+  }
+    
+  stage('deploy') {
+    dir ('source') {
+      mavenRuntime.deployer.deployArtifacts buildInfo
+      artifactoryServer.publishBuildInfo buildInfo
     }
   }
 }
