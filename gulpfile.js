@@ -96,7 +96,7 @@ gulp.task('compileOSX', run(
 
 gulp.task('linkOSX', run([
   'mkdir -p target/classes/natives/osx_64/',
-  `clang++ -lFileGDBAPI -stdlib=libc++ -Ltarget/FileGDB_API-64clang/lib -shared -o target/classes/natives/osx_64/libEsriFileGdbJni.dylib target/cpp/EsriFileGdb_wrap.o`
+  `clang++ -lFileGDBAPI -stdlib=libc++ -Ltarget/FileGDB_API-64clang/lib -shared -o target/classes/natives/osx_64/libFileGdbJni.dylib target/cpp/EsriFileGdb_wrap.o`
 ]));
 
 gulp.task('compileLinux', run(
@@ -104,8 +104,7 @@ gulp.task('compileLinux', run(
 ));
 
 gulp.task('linkLinux', run(
-  'mkdir -p target/classes/natives/linux_64/',
-  `clang++ -lFileGDBAPI -v -stdlib=libstdc++ -lpthread -lrt -Ltarget/FileGDB_API-64/lib -shared -o target/classes/natives/linux_64/libEsriFileGdbJni.so target/cpp/EsriFileGdb_wrap.o`
+  `clang++ -lFileGDBAPI -v -stdlib=libstdc++ -lpthread -lrt -Ltarget/FileGDB_API-64/lib -shared -o target/classes/natives/linux_64/libFileGdbJni.so target/cpp/EsriFileGdb_wrap.o`
 ));
 
 gulp.task('default', gulpSequence(

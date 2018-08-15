@@ -30,6 +30,7 @@ git config --global user.name "Paul Austin"
   }
 
   stage ('Checkout') {
+    sh 'rm -rf source'
     checkoutBranch('source', 'ssh://git@github.com/revolsys/com.revolsys.esri.filegdb-jni.git', 'master');
   }
   
@@ -101,18 +102,18 @@ gulp compileLinux
 gulp linkLinux
       '''
     }
-  }
   
-  stage('build') {
-    dir ('source') {
-      mavenRuntime.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
+    stage('build') {
+      dir ('source') {
+        mavenRuntime.run pom: 'pom.xml', goals: 'install', buildInfo: buildInfo
+      }
     }
-  }
     
-  stage('deploy') {
-    dir ('source') {
-      mavenRuntime.deployer.deployArtifacts buildInfo
-      artifactoryServer.publishBuildInfo buildInfo
+    stage('deploy') {
+      dir ('source') {
+        mavenRuntime.deployer.deployArtifacts buildInfo
+        artifactoryServer.publishBuildInfo buildInfo
+      }
     }
   }
 }
