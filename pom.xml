@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.revolsys.esri</groupId>
   <artifactId>file-gdb-jni</artifactId>
-  <version>TRUNK-SNAPSHOT</version>
+  <version>1.5.1-SNAPSHOT</version>
   <inceptionYear>2018</inceptionYear>
   <organization>
     <name>Revolution Systems Inc.</name>
@@ -36,13 +36,13 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git@github.com:revolsys/com.revolsys.filegdb.api.git</connection>
-    <developerConnection>scm:git:git@github.com:revolsys/com.revolsys.filegdb.api.git</developerConnection>
-    <url>https://github.com/revolsys/com.revolsys.filegdb.api</url>
+    <connection>scm:git:git@github.com:revolsys/com.revolsys.esri.file-gdb-jni.git</connection>
+    <developerConnection>scm:git:git@github.com:revolsys/com.revolsys.esri.file-gdb-jni.git</developerConnection>
+    <url>https://github.com/revolsys/com.revolsys.esri.file-gdb-jni</url>
   </scm>
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/revolsys/com.revolsys.filegdb.api/issues</url>
+    <url>https://github.com/revolsys/com.revolsys.esri.file-gdb-jni/issues</url>
   </issueManagement>
   <build>
     <plugins>

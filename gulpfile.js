@@ -108,9 +108,6 @@ gulp.task('linkLinux', run(
   `clang++ -lFileGDBAPI -v -stdlib=libstdc++ -lpthread -lrt -Ltarget/FileGDB_API-64/lib -shared -o target/classes/natives/linux_64/libEsriFileGdbJni-${version}.so target/cpp/EsriFileGdb_wrap.o`
 ));
 
-gulp.task('mavenInstall', run('mvn install', {
-}));
-
 gulp.task('default', gulpSequence(
   'mavenClean',
   'downloadEsriLinux',

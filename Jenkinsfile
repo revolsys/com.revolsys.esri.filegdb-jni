@@ -30,7 +30,7 @@ git config --global user.name "Paul Austin"
   }
 
   stage ('Checkout') {
-    checkoutBranch('source', 'ssh://git@github.com/revolsys/com.revolsys.filegdb.api.git', 'master');
+    checkoutBranch('source', 'ssh://git@github.com/revolsys/com.revolsys.esri.file-gdb-jni.git', 'master');
   }
   
   stage ('Cross Platform') {
