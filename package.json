@@ -18,12 +18,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/revolsys/com.revolsys.esri.file-gdb-jni.git"
+		"url": "git+https://github.com/revolsys/com.revolsys.esri.filegdb-jni.git"
 	},
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/revolsys/com.revolsys.esri.file-gdb-jni/issues"
+		"url": "https://github.com/revolsys/com.revolsys.esri.filegdb-jni/issues"
 	},
-	"homepage": "https://github.com/revolsys/com.revolsys.esri.file-gdb-jni#readme"
+	"homepage": "https://github.com/revolsys/com.revolsys.esri.filegdb-jni#readme"
 }
