@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.revolsys.esri</groupId>
   <artifactId>filegdb-jni</artifactId>
-  <version>1.5.1-SNAPSHOT</version>
+  <version>1.5.1-1</version>
   <inceptionYear>2018</inceptionYear>
   <organization>
     <name>Revolution Systems Inc.</name>

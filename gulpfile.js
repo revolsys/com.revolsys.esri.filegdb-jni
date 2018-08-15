@@ -8,6 +8,7 @@ var gulpSequence = require('gulp-sequence')
 const fs   = require('fs');
 
 const version = '1.5.1';
+const versionPackage = version + '-1';
 const version_ = version.replace(/\./g, '_');
 const baseUrl = `https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_${version}/`;
 const filePrefix = `FileGDB_API_${version_}-` ;
@@ -41,27 +42,27 @@ gulp.task('mavenClean', run('mvn clean', {
 gulp.task('copyEsriLibs', ()=> {
   return Promise.all([
     gulp.src('target/FileGDB_API-64/lib/libfgdbunixrtl.so')
-      .pipe(rename(`libfgdbunixrtl-${version}.so`))
+      .pipe(rename(`libfgdbunixrtl-${versionPackage}.so`))
       .pipe(gulp.dest('target/classes/natives/linux_64')),
 
     gulp.src('target/FileGDB_API-64/lib/libFileGDBAPI.so')
-      .pipe(rename(`libFileGDBAPI-${version}.so`))
+      .pipe(rename(`libFileGDBAPI-${versionPackage}.so`))
       .pipe(gulp.dest('target/classes/natives/linux_64')),
 
     gulp.src('target/FileGDB_API-64clang/lib/libfgdbunixrtl.dylib')
-      .pipe(rename(`libfgdbunixrtl-${version}.dylib`))
+      .pipe(rename(`libfgdbunixrtl-${versionPackage}.dylib`))
       .pipe(gulp.dest('target/classes/natives/osx_64')),
 
     gulp.src('target/FileGDB_API-64clang/lib/libFileGDBAPI.dylib')
-      .pipe(rename(`libFileGDBAPI-${version}.dylib`))
+      .pipe(rename(`libFileGDBAPI-${versionPackage}.dylib`))
       .pipe(gulp.dest('target/classes/natives/osx_64')),
 
     gulp.src('target/FileGDB_API-VS2017/bin64/Esri.FileGDBAPI.dll')
-      .pipe(rename(`Esri.FileGDBAPI-${version}.dll`))
+      .pipe(rename(`Esri.FileGDBAPI-${versionPackage}.dll`))
       .pipe(gulp.dest('target/classes/natives/windows_64')),
 
     gulp.src('target/FileGDB_API-VS2017/bin64/FileGDBAPI.dll')
-      .pipe(rename(`FileGDBAPI-${version}.dll`))
+      .pipe(rename(`FileGDBAPI-${versionPackage}.dll`))
       .pipe(gulp.dest('target/classes/natives/windows_64'))
   ]);
 });
@@ -96,7 +97,7 @@ gulp.task('compileOSX', run(
 
 gulp.task('linkOSX', run([
   'mkdir -p target/classes/natives/osx_64/',
-  `clang++ -lFileGDBAPI -stdlib=libc++ -Ltarget/FileGDB_API-64clang/lib -shared -o target/classes/natives/osx_64/libEsriFileGdbJni-${version}.dylib target/cpp/EsriFileGdb_wrap.o`
+  `clang++ -lFileGDBAPI -stdlib=libc++ -Ltarget/FileGDB_API-64clang/lib -shared -o target/classes/natives/osx_64/libEsriFileGdbJni-${versionPackage}.dylib target/cpp/EsriFileGdb_wrap.o`
 ]));
 
 gulp.task('compileLinux', run(
@@ -105,7 +106,7 @@ gulp.task('compileLinux', run(
 
 gulp.task('linkLinux', run(
   'mkdir -p target/classes/natives/linux_64/',
-  `clang++ -lFileGDBAPI -v -stdlib=libstdc++ -lpthread -lrt -Ltarget/FileGDB_API-64/lib -shared -o target/classes/natives/linux_64/libEsriFileGdbJni-${version}.so target/cpp/EsriFileGdb_wrap.o`
+  `clang++ -lFileGDBAPI -v -stdlib=libstdc++ -lpthread -lrt -Ltarget/FileGDB_API-64/lib -shared -o target/classes/natives/linux_64/libEsriFileGdbJni-${versionPackage}.so target/cpp/EsriFileGdb_wrap.o`
 ));
 
 gulp.task('default', gulpSequence(
