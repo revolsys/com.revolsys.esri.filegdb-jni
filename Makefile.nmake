@@ -1,4 +1,3 @@
-VERSION=1.5.1
 WIN_SDK=C:\Program Files (x86)\Windows Kits\10
 ESRI_FILE_GBD_HOME=target\FileGDB_API-VS2017
 PLATFORM=X64
@@ -9,7 +8,7 @@ ENTRY=-entry:_DllMainCRTStartup
 
 SRC_FILE=target\cpp\EsriFileGdb_wrap.cpp
 TARGET_OBJ=target\cpp\EsriFileGdbJni.obj
-TARGET_LIB=target\classes\natives\windows_64\EsriFileGdbJni-$(VERSION).dll
+TARGET_LIB=target\classes\natives\windows_64\FileGdbJni.dll
 
 all: $(TARGET_LIB)
 
