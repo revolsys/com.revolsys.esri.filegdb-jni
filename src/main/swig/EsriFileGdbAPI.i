@@ -67,7 +67,7 @@ import org.scijava.nativelib.NativeLoader;
         NativeLoader.loadLibrary("FileGdbJni");
       } else if (arch == Architecture.WINDOWS_64) {
         NativeLoader.loadLibrary("FileGDBAPI");
-        NativeLoader.loadLibrary("Esri.FILEGDBAPI");
+        NativeLoader.loadLibrary("Esri.FileGDBAPI");
         NativeLoader.loadLibrary("FileGdbJni");
         EsriFileGdb.setMaxOpenFiles(2048);
       } else {
