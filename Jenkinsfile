@@ -30,7 +30,9 @@ git config --global user.name "Paul Austin"
   }
 
   stage ('Checkout') {
-    sh 'rm -rf source'
+    dir ('source') {
+      deleteDir()
+    }
     checkoutBranch('source', 'ssh://git@github.com/revolsys/com.revolsys.esri.filegdb-jni.git', 'master');
   }
   
@@ -65,9 +67,12 @@ gulp
     ''', name: 'windows';
 
     node ('macosx') {
+      dir ('source') {
+        deleteDir()
+      }
+
       env.NODEJS_HOME = "${tool 'node-latest'}"
       env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
-     
       unstash 'shared';
       unstash 'osx';
       dir ('source') {
@@ -83,6 +88,10 @@ gulp linkOSX
     }
     
     node ('windows') {
+      dir ('source') {
+        deleteDir()
+      }
+
       env.PATH = env.PATH + ";c:\\Windows\\System32"
       unstash 'shared';
       unstash 'windows';
