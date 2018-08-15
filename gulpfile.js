@@ -79,7 +79,7 @@ gulp.task('swigDirectories', ()=> {
     'target/java/com/revolsys', 
     'target/java/com/revolsys/esri', 
     'target/java/com/revolsys/esri/filegdb', 
-    'target/java/com/revolsys/esri/filegdb/api'
+    'target/java/com/revolsys/esri/filegdb/jni'
   ]) {
     if(!fs.existsSync(dir)) {
       fs.mkdirSync(dir)
@@ -87,7 +87,7 @@ gulp.task('swigDirectories', ()=> {
   }
 });
 
-gulp.task('swig', run('swig -c++ -o target/cpp/EsriFileGdb_wrap.cpp -java -package com.revolsys.esri.filegdb.api -outdir target/java/com/revolsys/esri/filegdb/api -Isrc/main/swig -Itarget/FileGDB_API-64/include src/main/swig/EsriFileGdbAPI.i', {
+gulp.task('swig', run('swig -c++ -o target/cpp/EsriFileGdb_wrap.cpp -java -package com.revolsys.esri.filegdb.jni -outdir target/java/com/revolsys/esri/filegdb/jni -Isrc/main/swig -Itarget/FileGDB_API-64/include src/main/swig/EsriFileGdbAPI.i', {
 }));
 
 gulp.task('compileOSX', run(
