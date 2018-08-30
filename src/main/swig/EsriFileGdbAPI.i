@@ -74,7 +74,7 @@ import org.scijava.nativelib.NativeLoader;
         System.err.println("ESRI FGDB API not supported for Architecture: " + arch);
       }
     } catch (IOException e) {
-      System.err.println("Error loading ESRI FGDB API not supported for Architecture: " + arch);
+      System.err.println("Error loading ESRI FGDB API for Architecture: " + arch);
       e.printStackTrace();
     }
   }
