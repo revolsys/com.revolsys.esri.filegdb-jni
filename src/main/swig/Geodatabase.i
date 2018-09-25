@@ -23,10 +23,6 @@
     checkResult(self->CreateFeatureDataset(featureDatasetDef));
   }
 
-  void createFeatureDataset(const std::wstring &path, const SpatialReference& spatialReference ) {
-    checkResult(self->CreateFeatureDataset(path, spatialReference));
-  }
-
   FileGDBAPI::EnumRows* query(const std::wstring& sql, bool recycling) {
     FileGDBAPI::EnumRows* rows = new FileGDBAPI::EnumRows();
     checkResult(self->ExecuteSQL(sql, recycling, *rows));
