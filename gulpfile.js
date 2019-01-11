@@ -91,7 +91,11 @@ gulp.task('swig', run('swig -c++ -o target/cpp/EsriFileGdb_wrap.cpp -java -packa
 }));
 
 gulp.task('compileOSX', run(
-  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I/Library/Java/JavaVirtualMachines/jdk1.8.0/Contents/Home/include/" "-I/Library/Java/JavaVirtualMachines/jdk1.8.0/Contents/Home/include/darwin" "-Itarget/FileGDB_API-64clang/include" -stdlib=libc++ -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`
+  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I$(JAVA_HOME)" "-I$(JAVA_HOME)/include/darwin" "-Itarget/FileGDB_API-64clang/include" -stdlib=libc++ -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`, {
+    env: {
+      JAVA_HOME: '/Library/Java/JavaVirtualMachines/openjdk-11.0.1.jdk/Contents/Home'
+    }
+  }
 ));
 
 gulp.task('linkOSX', run([
@@ -100,7 +104,10 @@ gulp.task('linkOSX', run([
 ]));
 
 gulp.task('compileLinux', run(
-  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I/var/jenkins_home/tools/hudson.model.JDK/jdk-8/include/" "-I/var/jenkins_home/tools/hudson.model.JDK/jdk-8/include/linux" "-Itarget/FileGDB_API-64/include" -DLINUX_CLANG -std=c++11 -stdlib=libstdc++ -Wno-narrowing -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`
+  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I$(JAVA_HOME)/include/" "-I$(JAVA_HOME)/include/linux" "-Itarget/FileGDB_API-64/include" -DLINUX_CLANG -std=c++11 -stdlib=libstdc++ -Wno-narrowing -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`, {
+    env: {
+      JAVA_HOME: '=/usr/lib/jvm/java-11-openjdk-amd64'
+    }
 ));
 
 gulp.task('linkLinux', run(
