@@ -108,6 +108,7 @@ gulp.task('compileLinux', run(
     env: {
       JAVA_HOME: '=/usr/lib/jvm/java-11-openjdk-amd64'
     }
+  }
 ));
 
 gulp.task('linkLinux', run(
