@@ -41,115 +41,17 @@
 %include "Row.h"
 
 %extend FileGDBAPI::Row {
-  bool isNull(std::wstring name) {
-    bool value;
-    checkResult(self->IsNull(name,value));
-    return value;
-  }
-  void setNull(std::wstring name) {
-    checkResult(self->SetNull(name));
-  }
- 
-  long long getDate(const std::wstring& name) {
-    struct tm value;
-    checkResult(self->GetDate(name,value));
-    return mktime(&value);
-  }
-  void setDate(const std::wstring& name, long long date) {
-    const time_t time = (time_t)date;
-    struct tm* tm_time = localtime(&time);
-    if (tm_time == 0) {
-      std::stringstream message;
-      message << "Invalid date ";
-      message << date;
-      throw std::runtime_error(message.str());
-    } else {
-      struct tm value;
-      value = *tm_time;
-      checkResult(self->SetDate(name, value));
-    }
-  }
-
-  double getDouble(const std::wstring& name) {
-    double value;
-    checkResult(self->GetDouble(name,value));
-    return value;
-  }
-  
-  void setDouble(const std::wstring& name, double value) {
-    checkResult(self->SetDouble(name, value));
-  }
- 
-  float getFloat(const std::wstring& name) {
-    float value;
-    checkResult(self->GetFloat(name,value));
-    return value;
-  }
-  
-  void setFloat(const std::wstring& name, double value) {
-    checkResult(self->SetFloat(name, value));
-  }
-
-  FileGDBAPI::Guid getGuid(std::wstring name) {
-    FileGDBAPI::Guid value;
-    checkResult(self->GetGUID(name,value));
-    return value;
-  }
  
   FileGDBAPI::Guid getGlobalId() {
     FileGDBAPI::Guid value;
     checkResult(self->GetGlobalID(value));
     return value;
   }
-  
-  void setGuid(const std::wstring& name, const FileGDBAPI::Guid& value) {
-    checkResult(self->SetGUID(name, value));
-  }
 
   int getOid() {
     int value;
     checkResult(self->GetOID(value));
     return value;
-  }
-
-  short getShort(const std::wstring& name) {
-    short value;
-    checkResult(self->GetShort(name,value));
-    return value;
-  }
-  
-  void setShort(const std::wstring& name, short value) {
-    checkResult(self->SetShort(name, value));
-  }
-
-  int32 getInteger(const std::wstring& name) {
-    int value;
-    checkResult(self->GetInteger(name,value));
-    return value;
-  }
-    
-  void setInteger(const std::wstring& name, int32 value) {
-    checkResult(self->SetInteger(name, value));
-  }
-  
-  std::wstring getString(const std::wstring& name) {
-    std::wstring value;
-    checkResult(self->GetString(name,value));
-    return value;
-  }
-  
-  void setString(const std::wstring& name, const std::wstring& value) {
-    checkResult(self->SetString(name, value));
-  }
-
-  std::string getXML(const std::wstring& name) {
-    std::string value;
-    checkResult(self->GetXML(name,value));
-    return value;
-  }
-  
-  void setXML(const std::wstring& name, const std::string& value) {
-    checkResult(self->SetXML(name, value));
   }
 
   byte_array getGeometry() {
@@ -174,10 +76,102 @@
     shape.inUseLength = length;
     checkResult(self->SetGeometry(shape));
   }
-   
-  std::vector<FileGDBAPI::FieldDef> getFields {
-    std::vector<FileGDBAPI::FieldDef> value;
-    checkResult(self->GetFields(value));
+  bool isNull(const int fieldNumber) {
+    bool value;
+    checkResult(self->IsNull(fieldNumber,value));
     return value;
+  }
+  void setNull(const int fieldNumber) {
+    checkResult(self->SetNull(fieldNumber));
+  }
+ 
+  long long getDate(const int fieldNumber) {
+    struct tm value;
+    checkResult(self->GetDate(fieldNumber,value));
+    return mktime(&value);
+  }
+  void setDate(const int fieldNumber, long long date) {
+    const time_t time = (time_t)date;
+    struct tm* tm_time = localtime(&time);
+    if (tm_time == 0) {
+      std::stringstream message;
+      message << "Invalid date ";
+      message << date;
+      throw std::runtime_error(message.str());
+    } else {
+      struct tm value;
+      value = *tm_time;
+      checkResult(self->SetDate(fieldNumber, value));
+    }
+  }
+
+  double getDouble(const int fieldNumber) {
+    double value;
+    checkResult(self->GetDouble(fieldNumber,value));
+    return value;
+  }
+  
+  void setDouble(const int fieldNumber, double value) {
+    checkResult(self->SetDouble(fieldNumber, value));
+  }
+ 
+  float getFloat(const int fieldNumber) {
+    float value;
+    checkResult(self->GetFloat(fieldNumber,value));
+    return value;
+  }
+  
+  void setFloat(const int fieldNumber, double value) {
+    checkResult(self->SetFloat(fieldNumber, value));
+  }
+
+  FileGDBAPI::Guid getGuid(const int fieldNumber) {
+    FileGDBAPI::Guid value;
+    checkResult(self->GetGUID(fieldNumber,value));
+    return value;
+  }
+  
+  void setGuid(const int fieldNumber, const FileGDBAPI::Guid& value) {
+    checkResult(self->SetGUID(fieldNumber, value));
+  }
+
+  short getShort(const int fieldNumber) {
+    short value;
+    checkResult(self->GetShort(fieldNumber,value));
+    return value;
+  }
+  
+  void setShort(const int fieldNumber, short value) {
+    checkResult(self->SetShort(fieldNumber, value));
+  }
+
+  int32 getInteger(const int fieldNumber) {
+    int value;
+    checkResult(self->GetInteger(fieldNumber,value));
+    return value;
+  }
+    
+  void setInteger(const int fieldNumber, int32 value) {
+    checkResult(self->SetInteger(fieldNumber, value));
+  }
+  
+  std::wstring getString(const int fieldNumber) {
+    std::wstring value;
+    checkResult(self->GetString(fieldNumber,value));
+    return value;
+  }
+  
+  void setString(const int fieldNumber, const std::wstring& value) {
+    checkResult(self->SetString(fieldNumber, value));
+  }
+
+  std::string getXML(const int fieldNumber) {
+    std::string value;
+    checkResult(self->GetXML(fieldNumber,value));
+    return value;
+  }
+  
+  void setXML(const int fieldNumber, const std::string& value) {
+    checkResult(self->SetXML(fieldNumber, value));
   }
 }

@@ -11,6 +11,8 @@ const version = '1.5.1';
 const version_ = version.replace(/\./g, '_');
 const baseUrl = `https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_${version}/`;
 const filePrefix = `FileGDB_API_${version_}-` ;
+const javaHomeMac = '/Library/Java/JavaVirtualMachines/openjdk-11.0.2.jdk/Contents/Home';
+const javaHomeLinux = '/usr/lib/jvm/java-11-openjdk-amd64';
 
 gulp.task('downloadEsriOSX', function() {
   return download(baseUrl + filePrefix + '64clang.zip')
@@ -91,11 +93,7 @@ gulp.task('swig', run('swig -c++ -o target/cpp/EsriFileGdb_wrap.cpp -java -packa
 }));
 
 gulp.task('compileOSX', run(
-  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I$(JAVA_HOME)" "-I$(JAVA_HOME)/include/darwin" "-Itarget/FileGDB_API-64clang/include" -stdlib=libc++ -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`, {
-    env: {
-      JAVA_HOME: '/Library/Java/JavaVirtualMachines/openjdk-11.0.2.jdk/Contents/Home'
-    }
-  }
+  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I${javaHomeMac}/include/" "-I${javaHomeMac}/include/darwin" "-Itarget/FileGDB_API-64clang/include" -stdlib=libc++ -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`
 ));
 
 gulp.task('linkOSX', run([
@@ -104,11 +102,7 @@ gulp.task('linkOSX', run([
 ]));
 
 gulp.task('compileLinux', run(
-  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I$(JAVA_HOME)/include/" "-I$(JAVA_HOME)/include/linux" "-Itarget/FileGDB_API-64/include" -DLINUX_CLANG -std=c++11 -stdlib=libstdc++ -Wno-narrowing -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`, {
-    env: {
-      JAVA_HOME: '=/usr/lib/jvm/java-11-openjdk-amd64'
-    }
-  }
+  `clang++ -W -fexceptions -fPIC -O3 -m64 -DUNICODE -D_UNICODE -DUNIX -D_REENTRANT -DFILEGDB_API -D__USE_FILE_OFFSET64 -DUNIX_FILEGDB_API -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE "-I${javaHomeLinux}/include/" "-I${javaHomeLinux}/include/linux" "-Itarget/FileGDB_API-64/include" -DLINUX_CLANG -std=c++11 -stdlib=libstdc++ -Wno-narrowing -c target/cpp/EsriFileGdb_wrap.cpp -o target/cpp/EsriFileGdb_wrap.o`
 ));
 
 gulp.task('linkLinux', run(
