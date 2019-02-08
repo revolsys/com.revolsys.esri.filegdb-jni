@@ -33,7 +33,7 @@ git config --global user.name "Paul Austin"
     dir ('source') {
       deleteDir()
     }
-    checkoutBranch('source', 'ssh://git@github.com/revolsys/com.revolsys.esri.filegdb-jni.git', 'master');
+    checkoutBranch('source', 'https://github.com/revolsys/com.revolsys.esri.filegdb-jni.git', 'master');
   }
   
   stage ('Cross Platform') {
