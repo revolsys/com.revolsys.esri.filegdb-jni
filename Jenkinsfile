@@ -107,6 +107,7 @@ gulp linkOSX
     unstash 'windowsLib'
     dir ('source') {
       sh '''
+npm install
 gulp compileLinux
 gulp linkLinux
       '''
