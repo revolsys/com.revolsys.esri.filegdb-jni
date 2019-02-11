@@ -105,6 +105,7 @@ gulp linkOSX
 
     unstash 'osxLib'
     unstash 'windowsLib'
+
     dir ('source') {
       sh '''
 npm install
