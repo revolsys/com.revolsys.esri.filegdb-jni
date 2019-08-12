@@ -6,7 +6,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.revolsys.esri</groupId>
   <artifactId>filegdb-jni</artifactId>
-  <version>1.5.1-3</version>
+  <description>Java Bindings for the ESRI FileGeodatabase API</description>
+  <version>1.5.1-4</version>
   <inceptionYear>2018</inceptionYear>
   <organization>
     <name>Revolution Systems Inc.</name>
@@ -16,6 +17,7 @@
     <contributor>
       <organization>ESRI</organization>
       <organizationUrl>http://www.esri.com</organizationUrl>
+      <url>https://github.com/Esri/file-geodatabase-api</url>
       <roles>
         <role>Developer of the ESRI FileGDB API</role>
       </roles>

@@ -1,5 +1,7 @@
 
-   Copyright 2018 Revolution Systems Inc.
+   Copyright 2017 Esri - For the File Geodatabase C++ API
+
+   Copyright 2018 Revolution Systems Inc. - For the Java Swig bindings
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
