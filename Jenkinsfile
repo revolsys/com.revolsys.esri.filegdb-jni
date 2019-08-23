@@ -108,6 +108,8 @@ gulp linkOSX
     unstash 'windowsLib'
 
     dir ('source') {
+      env.NODEJS_HOME = "${tool 'node-latest'}"
+      env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
       sh '''
 npm install
 gulp compileLinux
