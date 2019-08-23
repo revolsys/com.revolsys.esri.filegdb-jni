@@ -98,7 +98,8 @@ gulp.task('compileOSX', run(
 
 gulp.task('linkOSX', run([
   'mkdir -p target/classes/natives/osx_64/',
-  `clang++ -lFileGDBAPI -stdlib=libc++ -Ltarget/FileGDB_API-64clang/lib -shared -o target/classes/natives/osx_64/libFileGdbJni.dylib target/cpp/EsriFileGdb_wrap.o`
+  `clang++ -lFileGDBAPI -stdlib=libc++ -Ltarget/FileGDB_API-64clang/lib -shared -o target/classes/natives/osx_64/libFileGdbJni.dylib target/cpp/EsriFileGdb_wrap.o`,
+  `codesign -s '-' target/classes/natives/osx_64/libFileGdbJni.dylib`
 ]));
 
 gulp.task('compileLinux', run(
