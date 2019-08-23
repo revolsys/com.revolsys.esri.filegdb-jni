@@ -84,6 +84,7 @@ gulp linkOSX
       '''
       }
       stash includes: '''
+        source/target/FileGDB_API-64clang/lib/**,
         source/target/classes/natives/osx_64/**
       ''', name: 'osxLib';
     }
