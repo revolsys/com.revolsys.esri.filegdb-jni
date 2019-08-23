@@ -57,7 +57,8 @@ gulp
 
     stash includes: '''
       source/target/FileGDB_API-64clang/include/**,
-      source/target/FileGDB_API-64clang/lib/**
+      source/target/FileGDB_API-64clang/lib/**,
+      source/target/classes/natives/osx_64/**
     ''', name: 'osx';
 
     stash includes: '''
@@ -84,7 +85,6 @@ gulp linkOSX
       '''
       }
       stash includes: '''
-        source/target/FileGDB_API-64clang/lib/**,
         source/target/classes/natives/osx_64/**
       ''', name: 'osxLib';
     }
