@@ -11,7 +11,7 @@ const version = '1.5.1';
 const version_ = version.replace(/\./g, '_');
 const baseUrl = `https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_${version}/`;
 const filePrefix = `FileGDB_API_${version_}-` ;
-const javaHomeMac = '/Library/Java/JavaVirtualMachines/openjdk-11.0.2.jdk/Contents/Home';
+const javaHomeMac = '/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home';
 const javaHomeLinux = '/usr/lib/jvm/java-11-openjdk-amd64';
 
 gulp.task('downloadEsriOSX', function() {
