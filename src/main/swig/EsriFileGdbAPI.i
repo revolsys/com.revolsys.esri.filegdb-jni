@@ -22,7 +22,7 @@ fgdbError checkResult(fgdbError error) {
   if (error) {
      std::wstring errorString;
      if (FileGDBAPI::ErrorInfo::GetErrorDescription(error, errorString) == S_FALSE) {
-       errorString = "Unknown error";
+       errorString = L"Unknown error";
      }
      std::stringstream out;
      out << wstring2string(errorString) << " (" << error << ")";
