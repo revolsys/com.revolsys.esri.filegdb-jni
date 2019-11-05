@@ -16,7 +16,7 @@ def checkoutBranch(folderName, url, branchName) {
 node ('linux') {
   def artifactoryServer = Artifactory.server 'prod'
   def mavenRuntime = Artifactory.newMavenBuild()
-  env.JAVA_HOME = '/usr/lib/jvm/java-11-openjdk-amd64'
+  env.JAVA_HOME="${tool 'jdk11'}"
   mavenRuntime.tool = 'm3' 
   mavenRuntime.deployer releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local', server: artifactoryServer
   mavenRuntime.resolver releaseRepo: 'repo', snapshotRepo: 'repo', server: artifactoryServer
