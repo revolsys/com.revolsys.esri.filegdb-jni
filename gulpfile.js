@@ -12,7 +12,7 @@ const version_ = version.replace(/\./g, '_');
 const baseUrl = `https://raw.githubusercontent.com/Esri/file-geodatabase-api/master/FileGDB_API_${version}/`;
 const filePrefix = `FileGDB_API_${version_}-` ;
 const javaHomeMac = '/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home';
-const javaHomeLinux = '/usr/lib/jvm/java-11-openjdk-amd64';
+const javaHomeLinux = '/var/jenkins_home/tools/hudson.model.JDK/openjdk-11';
 
 gulp.task('downloadEsriOSX', function() {
   return download(baseUrl + filePrefix + '64clang.zip')
