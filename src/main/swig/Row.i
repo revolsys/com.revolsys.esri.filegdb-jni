@@ -76,6 +76,30 @@
     shape.inUseLength = length;
     checkResult(self->SetGeometry(shape));
   }
+
+  byte_array getBinary(const int fieldNumber) {
+    ByteArray binary;
+    checkResult(self->GetBinary(binary));
+    
+    byte_array buffer;
+    buffer.bytes = new byte[binary.inUseLength];
+    memcpy(buffer.bytes, binary.byteArray, binary.inUseLength);
+    buffer.length = binary.inUseLength;
+    
+    return buffer;
+  }
+   
+  void setBinary(char* byteArray, size_t length) {
+    ByteArray binary;
+    binary.Allocate(length);
+    for (size_t i = 0; i < length; i++) {
+      char c = byteArray[i];
+      binary.byteArray[i] = (byte)c;
+    }
+    binary.inUseLength = length;
+    checkResult(self->SetBinary(binary));
+  }
+
   bool isNull(const int fieldNumber) {
     bool value;
     checkResult(self->IsNull(fieldNumber,value));
