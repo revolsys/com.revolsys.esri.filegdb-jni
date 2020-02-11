@@ -79,7 +79,7 @@
 
   byte_array getBinary(const int fieldNumber) {
     FileGDBAPI::ByteArray binary;
-    checkResult(self->GetBinary(binary));
+    checkResult(self->GetBinary(fieldNumber, binary));
     
     byte_array buffer;
     buffer.bytes = new byte[binary.inUseLength];
@@ -97,7 +97,7 @@
       binary.byteArray[i] = (byte)c;
     }
     binary.inUseLength = length;
-    checkResult(self->SetBinary(binary));
+    checkResult(self->SetBinary(fieldNumber, binary));
   }
 
   bool isNull(const int fieldNumber) {
