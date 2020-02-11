@@ -78,7 +78,7 @@
   }
 
   byte_array getBinary(const int fieldNumber) {
-    ByteArray binary;
+    FileGDBAPI::ByteArray binary;
     checkResult(self->GetBinary(binary));
     
     byte_array buffer;
@@ -90,7 +90,7 @@
   }
    
   void setBinary(char* byteArray, size_t length) {
-    ByteArray binary;
+    FileGDBAPI::ByteArray binary;
     binary.Allocate(length);
     for (size_t i = 0; i < length; i++) {
       char c = byteArray[i];
