@@ -40,7 +40,7 @@ git config --global user.name "Paul Austin"
   stage ('Cross Platform') {
     dir ('source') {
       sh '''
-npm install
+npm install --loglevel silent
 gulp
       '''
     }
@@ -78,8 +78,8 @@ gulp
       unstash 'shared';
       unstash 'osx';
       dir ('source') {
-        sh '''
-npm install
+        sh ''' 
+npm install --loglevel silent
 gulp compileOSX
 gulp linkOSX
       '''
