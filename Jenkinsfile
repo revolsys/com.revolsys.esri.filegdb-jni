@@ -13,7 +13,7 @@ def checkoutBranch(folderName, url, branchName) {
   }
 }
 
-node ('linux') {
+node ('master') {
   def artifactoryServer = Artifactory.server 'prod'
   def mavenRuntime = Artifactory.newMavenBuild()
   env.JAVA_HOME="${tool 'jdk11'}"
