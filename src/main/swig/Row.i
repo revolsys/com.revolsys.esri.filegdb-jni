@@ -89,11 +89,11 @@
     return buffer;
   }
    
-  void setBinary(const int fieldNumber, char* bytes, size_t length) {
+  void setBinary(const int fieldNumber, char* byteArray, size_t length) {
     FileGDBAPI::ByteArray binary;
     binary.Allocate(length);
     for (size_t i = 0; i < length; i++) {
-      char c = bytes[i];
+      char c = byteArray[i];
       binary.byteArray[i] = (byte)c;
     }
     binary.inUseLength = length;

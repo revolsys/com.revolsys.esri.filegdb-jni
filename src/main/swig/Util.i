@@ -42,6 +42,7 @@
 %ignore FileGDBAPI::SpatialReference;
 
 %ignore FileGDBAPI::ShapeBuffer;
+%ignore FileGDBAPI::ByteArray;
 
 %ignore FileGDBAPI::EnumSpatialReferenceInfo;
 %ignore FileGDBAPI::SpatialReferenceInfo;
