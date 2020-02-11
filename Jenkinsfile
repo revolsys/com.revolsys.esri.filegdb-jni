@@ -110,6 +110,7 @@ gulp linkOSX
 
     dir ('source') {
       env.NODEJS_HOME = "${tool 'node-latest'}"
+      env.JAVA_HOME = "${tool 'openjdk-11'}"
       env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
       sh '''
 npm install
